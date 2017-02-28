@@ -16,6 +16,8 @@
   },
   "homepage": "https://github.com/Omarkojak/met-portfolio#readme",
   "dependencies": {
-    "dotenv": "^4.0.0"
+    "dotenv": "^4.0.0",
+    "express": "^4.14.1",
+    "mongoose": "^4.8.5"
   }
 }
