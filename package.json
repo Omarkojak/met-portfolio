@@ -1,0 +1,21 @@
+{
+  "name": "met-portfolio",
+  "version": "1.0.0",
+  "description": "(A portfolio system for MET and BI students so they can upload their works through the semster)",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Omarkojak/met-portfolio.git"
+  },
+  "author": "Omar Ashraf (kojak)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Omarkojak/met-portfolio/issues"
+  },
+  "homepage": "https://github.com/Omarkojak/met-portfolio#readme",
+  "dependencies": {
+    "dotenv": "^4.0.0"
+  }
+}
