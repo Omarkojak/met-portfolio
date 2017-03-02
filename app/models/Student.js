@@ -13,7 +13,9 @@ const studentSchema = mongoose.Schema({
         required: true
     },
     email: {
-        
+        type : String,
+        required : true,
+        unique: true
     },
     username: {
         type: String,
