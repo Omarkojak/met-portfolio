@@ -73,7 +73,6 @@ router.post('/login', function (req, res, next) {
                 return next(err);
             }
             if (!isMatch) {
-                console.log(username + " " + password);
                 return next('The password you entered is wrong');
             }
             let token = jwt.sign({
