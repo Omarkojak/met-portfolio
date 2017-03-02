@@ -46,7 +46,7 @@ studentSchema.pre("save", function (done) {
     if (!student.isModified("password")) {
         return done();
     }
-    bcrypt.hash(student, password, null, null, function (err, hased_password) {
+    bcrypt.hash(student.password, null, null, function (err, hased_password) {
         if (err) {
             return done(err);
         }
