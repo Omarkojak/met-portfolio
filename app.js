@@ -6,6 +6,8 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const flash = require("connect-flash");
+const passport = require('passport');
+const auth = require('./app/middlewares/authentication');
 
 require('dotenv').config();
 
@@ -19,6 +21,9 @@ app.set("port", port);
 
 app.set("views", path.join(__dirname, "app/views"));
 app.set("view engine", "ejs");
+
+passport.use(auth.strategy);
+app.use(passport.initialize());
 
 app.use(bodyParser.urlencoded({
   extended: false

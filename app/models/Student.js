@@ -57,7 +57,10 @@ studentSchema.pre("save", function (done) {
 
 studentSchema.methods.checkPassword = function (guess, done) {
     bcrypt.compare(guess, this.password, function (err, isMatch) {
-        done(err, isMatch);
+        if(err) {
+            return done(err);
+        }
+        done(null, isMatch);
     });
 };
 
