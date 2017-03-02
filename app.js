@@ -3,9 +3,6 @@ const mongoose = require('mongoose');
 const routes = require('./app/routes');
 const path = require('path');
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
-const session = require("express-session");
-const flash = require("connect-flash");
 const passport = require('passport');
 const auth = require('./app/middlewares/authentication');
 
@@ -28,14 +25,7 @@ app.use(passport.initialize());
 app.use(bodyParser.urlencoded({
   extended: false
 }));
-app.use(cookieParser());
-app.use(session({
-  secret: "TKRv0IJs=HYqrvagQ#&!F!%V]Ww/4KiVs$s,<<MX",
-  resave: true,
-  saveUninitialized: true
-}));
 
-app.use(flash());
 app.use(routes);
 
 app.use(function (err, req, res, next) {
