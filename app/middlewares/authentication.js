@@ -1,6 +1,6 @@
 const passport = require('passport');
 const passportJWT = require('passport-jwt');
-var headerParser = require('header-parser');
+const headerParser = require('header-parser');
 
 const Student = require("../models/Student");
 const InvalidToken = require("../models/InvalidToken");

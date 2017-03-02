@@ -1,19 +1,15 @@
 const express = require("express");
 const bodyParser = require('body-parser');
-const Student = require("./models/Student");
+const headerParser = require('header-parser');
 const jwt = require('jsonwebtoken');
+
+const Student = require("./models/Student");
+const InvalidToken = require("./models/InvalidToken");
 
 const router = express.Router();
 const secretOrKey = '7QF7d5Bydj6cDF6Eckgh';
 
 router.use(bodyParser.json());
-
-router.use(function (req, res, next) {
-    res.locals.currentUser = req.user;
-    res.locals.errors = req.flash("error");
-    res.locals.infos = req.flash("info");
-    next();
-});
 
 router.get("/", function (req, res, next) {
     res.render("index");
@@ -87,6 +83,20 @@ router.post('/login', function (req, res, next) {
             })
         })
     })
+});
+
+router.post('/logout', function (req, res, next) {
+    let token = new InvalidToken({
+        token: headerParser(req.headers)
+    });
+    token.save(function (err) {
+        if (err) {
+            return next(err);
+        }
+        return res.json({
+            message: 'Logged Out Successfully'
+        });
+    });
 });
 
 module.exports = router;
