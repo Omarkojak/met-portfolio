@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "(A portfolio system for MET and BI students so they can upload their works through the semster)",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
@@ -16,8 +17,15 @@
   },
   "homepage": "https://github.com/Omarkojak/met-portfolio#readme",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.17.0",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
     "dotenv": "^4.0.0",
+    "ejs": "^2.5.6",
     "express": "^4.14.1",
+    "express-session": "^1.15.1",
+    "flash": "^1.1.0",
     "mongoose": "^4.8.5"
   }
 }
