@@ -26,8 +26,6 @@ router.post("/signup", function (req, res, next) {
     let password = req.body.password;
     console.log(req.body.first_name);
     if (!first_name || !last_name || !email || !username || !password) {
-        console.log(first_name + " " + last_name + " " + email + " " + username + " " + password);
-        console.log("nooooooooo1");
         return next();
     }
     let student = new Student({
@@ -39,7 +37,6 @@ router.post("/signup", function (req, res, next) {
     });
     student.save(function (err) {
         if (err) {
-            console.log("nooooooooo2");
             return next(err);
         }
         return res.json({
