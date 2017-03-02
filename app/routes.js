@@ -1,7 +1,12 @@
 const express = require("express");
+const bodyParser = require('body-parser');
 const Student = require("./models/Student");
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
+const secretOrKey = '7QF7d5Bydj6cDF6Eckgh';
+
+router.use(bodyParser.json());
 
 router.use(function (req, res, next) {
     res.locals.currentUser = req.user;
@@ -24,7 +29,6 @@ router.post("/signup", function (req, res, next) {
     let email = req.body.email;
     let username = req.body.username;
     let password = req.body.password;
-    console.log(req.body.first_name);
     if (!first_name || !last_name || !email || !username || !password) {
         return next();
     }
@@ -43,6 +47,47 @@ router.post("/signup", function (req, res, next) {
             message: "You've singed up successfully"
         });
     });
+});
+
+router.get('login', function (req, res) {
+    res.render('login');
+});
+
+router.post('/login', function (req, res, next) {
+    let username = req.body.username;
+    let password = req.body.password;
+    if (!username || !password) {
+        return next();
+    }
+    Student.findOne({
+        username: username
+    }, function (err, user) {
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            return next('Invalid username');
+        }
+        user.checkPassword(password, function (err, isMatch) {
+            if (err) {
+                return next(err);
+            }
+            if (!isMatch) {
+                console.log(username + " " + password);
+                return next('The password you entered is wrong');
+            }
+            let token = jwt.sign({
+                id: user._id
+            }, secretOrKey, {
+                expiresIn: '5d'
+            });
+
+            return res.json({
+                message: "Logged in successfully",
+                token: token
+            })
+        })
+    })
 });
 
 module.exports = router;

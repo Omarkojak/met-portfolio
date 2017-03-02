@@ -26,6 +26,10 @@
     "express": "^4.14.1",
     "express-session": "^1.15.1",
     "flash": "^1.1.0",
-    "mongoose": "^4.8.5"
+    "header-parser": "^1.0.0",
+    "jsonwebtoken": "^7.3.0",
+    "mongoose": "^4.8.5",
+    "passport": "^0.3.2",
+    "passport-jwt": "^2.2.1"
   }
 }
