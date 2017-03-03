@@ -54,8 +54,9 @@ router.get("/signup", function (req, res) {
     res.render(ejs.render("signup"));
 });
 
-router.post("/signup", upload.single('img'), function (req, res, next) {
+router.post("/signup", upload.single('pic'), function (req, res, next) {
     let img = req.file;
+    console.log(req.file);
     let first_name = req.body.first_name;
     let last_name = req.body.last_name;
     let email = req.body.email;
@@ -111,8 +112,7 @@ function ensureAuthenticated(req, res, next) {
     }
 }
 
-router.get('portfolio/:username', function (req, res) {
-    console.log("hello");
+router.get('/portfolio/:username', function (req, res, next) {
     const username = req.params.username;
     User.findOne({
         username: username
@@ -123,25 +123,22 @@ router.get('portfolio/:username', function (req, res) {
         if (!user) {
             return next();
         }
-    });
-    Projects.findOne({
-            creator: username
-        }).sort({
-            createdAt: "descending"
-        })
-        .exec(function (err, projects) {
-            if (err) {
-                projects = [];
-            }
-            res.render("portfolio", {
-                projects: projects,
-                user: user
+        Project.findOne({
+                creator: username
+            }).sort({
+                createdAt: "descending"
+            })
+            .exec(function (err, projects) {
+                if (err) {
+                    projects = null;
+                }
+                res.render("portfolio", {
+                    projects: projects,
+                    user: user
+                });
             });
-        });
-});
+    });
 
-router.get('/portfolio/new/:username', ensureAuthenticated, function (req, res) {
-    return render('addProject');
 });
 
 router.post('/portfolio/new/:username', ensureAuthenticated, upload.single('img'), function (req, res) {
@@ -159,8 +156,8 @@ router.post('/portfolio/new/:username', ensureAuthenticated, upload.single('img'
         creator: username,
         name: name,
         comment: comment,
-        screenshots: img.filename,
-        links: link
+        screenshot: img.filename,
+        link: link
     });
     project.save(function (err) {
         if (err) {
@@ -181,6 +178,37 @@ router.post('/portfolio/new/:username', ensureAuthenticated, upload.single('img'
         });
         req.flash("Project added sucessfully");
         res.redirect('/portfolio/:username');
+    })
+});
+
+router.get('/portfolio/new/:username', function (req, res) {
+    const username = req.params.username;
+    User.findOne({
+        username: username
+    }, function (err, user) {
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            return next();
+        }
+        res.render('addProject', {
+            user: user
+        });
+    })
+});
+
+router.get('/project/:id', ensureAuthenticated, function (req, res) {
+    const id = req.params.id;
+    Project.findOne({
+        _id: id
+    }, function (project, err) {
+        if (err) {
+            return next(err);
+        }
+        res.render("project", {
+            project: project,
+        });
     })
 });
 
@@ -210,6 +238,7 @@ router.get('summary/:page', function (req, res) {
     res.render("summary", {
         total: total,
     });
+    // i couldn't complete that
 });
 
 module.exports = router;

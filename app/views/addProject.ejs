@@ -1,6 +1,6 @@
 <% include _header %>
     <h1>Add a project</h1>
-    <form id="frmDoc" name="frmDocument" ng-submit="upload()" class="form-horizontal form-bordered" enctype="multipart/form-data">
+    <form id="frmDoc" method="post" action="/portfolio/new/<%= user.name() %>" name="frmDocument" ng-submit="upload()" class="form-horizontal form-bordered" enctype="multipart/form-data">
         <fieldset>
             <div class="form-group">
                 <label class="col-md-4 control-label" for="val_email">Name<span class="text-danger">*</span></label>
@@ -22,7 +22,7 @@
                 <label class="col-md-4 control-label" for="val_email">Add links<span class="text-danger">*</span></label>
                 <div class="col-md-4">
                     <div class="input-group">
-                        <input type="text" name="name" id='name' required="required" />
+                        <input type="text" name="name" id='name'/>
                     </div>
                 </div>
             </div>
@@ -32,7 +32,7 @@
                 <label class="col-md-4 control-label" for="val_email">Upload Screenshoots<span class="text-danger">*</span></label>
                 <div class="col-md-4">
                     <div class="input-group">
-                        <input type="file" name="file" id='file' required="required" />
+                        <input type="file" name="file" id='file'/>
                     </div>
                 </div>
             </div>
