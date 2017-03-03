@@ -9,6 +9,8 @@ const User = require("./models/User");
 const Project = require("./models/Project");
 const Portfolio = require("./models/Portfolio");
 
+const ejs = require('ejs');
+
 const secretOrKey = '7QF7d5Bydj6cDF6Eckgh';
 
 const storage = multer.diskStorage({
@@ -36,15 +38,15 @@ router.use(function (req, res, next) {
 });
 
 router.get("/", function (req, res, next) {
-    res.render("index");
+    res.render(ejs.render("index"));
 });
 
 router.get("/", function (req, res) {
-    res.render("index");
+    res.render(ejs.render("index"));
 });
 
 router.get("/signup", function (req, res) {
-    res.render("signup");
+    res.render(ejs.render("signup"));
 });
 
 router.post("/signup", upload.single('img'), function (req, res, next) {
@@ -81,7 +83,7 @@ router.post("/signup", upload.single('img'), function (req, res, next) {
 }));
 
 router.get("/login", function (req, res) {
-    res.render('login');
+    res.render(ejs.render('login'));
 });
 
 router.post('/login',
