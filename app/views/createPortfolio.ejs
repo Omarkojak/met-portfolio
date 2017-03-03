@@ -1,0 +1,9 @@
+<% include _header %>
+    <h1>Create Your own Portfolio</h1>
+    <form action="/portfolio" method="post">
+        <input name="first-name" type="text" class="form-control" placeholder="First Name" required autofocus>
+        <input name="last-name" type="text" class="form-control" placeholder="Last Name" required autofocus>
+        <input name="portfolio-img" type="file" class="form-control" placeholder="Profile Picture" autofocus>
+        <input type="submit" value="Create Portfolio" class="btn btn-primary btn-block">
+    </form>
+<% include _footer %>

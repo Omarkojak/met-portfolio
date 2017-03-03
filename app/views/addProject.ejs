@@ -1,0 +1,46 @@
+<% include _header %>
+    <h1>Add a project</h1>
+    <form id="frmDoc" name="frmDocument" ng-submit="upload()" class="form-horizontal form-bordered" enctype="multipart/form-data">
+        <fieldset>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="val_email">Name<span class="text-danger">*</span></label>
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <input type="text" name="name" id='name' required="required" />
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="form-group">
+                <label for="comment">Comment:</label>
+                <textarea class="form-control" rows="5" id="comment"></textarea>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="val_email">Add links<span class="text-danger">*</span></label>
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <input type="text" name="name" id='name' required="required" />
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="val_email">Upload Screenshoots<span class="text-danger">*</span></label>
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <input type="file" name="file" id='file' required="required" />
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <div class="form-group form-actions">
+            <div class="col-md-8 col-md-offset-4">
+                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-upload"></i> submit</button>
+            </div>
+        </div>
+    </form>
+<% include _footer %>
