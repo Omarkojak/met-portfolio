@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
 
-const studentSchema = mongoose.Schema({
+const userSchema = mongoose.Schema({
     first_name: {
         type: String,
         required: true
@@ -41,21 +41,21 @@ const studentSchema = mongoose.Schema({
     }
 });
 
-studentSchema.pre("save", function (done) {
-    let student = this;
-    if (!student.isModified("password")) {
+userSchema.pre("save", function (done) {
+    let user = this;
+    if (!user.isModified("password")) {
         return done();
     }
-    bcrypt.hash(student.password, null, null, function (err, hased_password) {
+    bcrypt.hash(user.password, null, null, function (err, hased_password) {
         if (err) {
             return done(err);
         }
-        student.password = hased_password;
+        user.password = hased_password;
         return done();
     });
 });
 
-studentSchema.methods.checkPassword = function (guess, done) {
+userSchema.methods.checkPassword = function (guess, done) {
     bcrypt.compare(guess, this.password, function (err, isMatch) {
         if(err) {
             return done(err);
@@ -64,10 +64,10 @@ studentSchema.methods.checkPassword = function (guess, done) {
     });
 };
 
-studentSchema.methods.fullname = function () {
+userSchema.methods.fullname = function () {
     return this.first_name + " " + this.last_name;
 };
 
-let Student = mongoose.model("Student", studentSchema);
+let User = mongoose.model("User", userSchema);
 
-module.exports = Student;
+module.exports = User;
