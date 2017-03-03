@@ -46,12 +46,14 @@ router.get("/signup", function (req, res) {
     res.render("signup");
 });
 
-router.post("/signup", function (req, res, next) {
+router.post("/signup", upload.single('img'), function (req, res, next) {
     let first_name = req.body.first_name;
     let last_name = req.body.last_name;
     let email = req.body.email;
     let username = req.body.username;
     let password = req.body.password;
+    let img = req.file;
+
     if (!first_name || !last_name || !email || !username || !password) {
         return next();
     }
@@ -60,7 +62,8 @@ router.post("/signup", function (req, res, next) {
         last_name: last_name,
         email: email,
         username: username,
-        password: password
+        password: password,
+        profile_pic: img ? img.filename : "unknown1.png"
     });
     console.log(password);
     user.save(function (err) {
@@ -102,17 +105,63 @@ function ensureAuthenticated(req, res, next) {
     }
 }
 
-router.get('/portfolio', function (req, res) {
-    Project.find({
-        creator: req.user._id
-    }, function (err, projects) {
+router.get('/:username/portfolio', ensureAuthenticated, function (req, res) {
+    const username = req.params.username;
+    User.findOne({
+        username: username
+    }, function (err, user) {
         if (err) {
             return next(err);
         }
-        res.render('portfolio', {
-            projects: projects
-        });
+        if (!user) {
+            return next();
+        }
     });
+    Projects.findOne({
+            creator: username
+        }).sort({
+            createdAt: "descending"
+        })
+        .exec(function (err, users) {
+            if (err) {
+                return next(err);
+            }
+            res.render("profile", {
+                projects: projects,
+                user: user
+            });
+        });
+});
+
+router.get('/:username/portfolio/new', ensureAuthenticated,function (req, res) {
+    return render('addProject');
+});
+
+router.post('/:username/portfolio/new', ensureAuthenticated,upload.single('img'), function (req, res) {
+    let link = req.body.link;
+    let img = req.file;
+    let username = req.params.username;
+    if(!img && !link){
+        req.flash('error', 'You must provide wither a link or an image or both');
+        res.redirect('/:username/portfolio/new');
+    }
+    let name = req.body.name;
+    let comment = req.body.comments;
+
+    let project = new Project({
+        creator: username,
+        name: name,
+        comment: comment,
+        screenshots: img.filename,
+        links: link
+    });
+    project.save(function(err){
+        if(err){
+            return next(err);
+        }
+        req.flash("Project added sucessfully");
+        res.redirect('/:username/portfolio');
+    })
 });
 
 

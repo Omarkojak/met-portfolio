@@ -2,16 +2,19 @@ const mongoose = require('mongoose');
 
 const Project = mongoose.Schema({
     creator: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Student',
+        type: String,
         required: true,
         unique: true
     },
-    name:{
+    name: {
         type: String
     },
     comment: {
         type: String
+    },
+    created_at: {
+        type: Date,
+        default: Date.now
     },
     screenshots: [{
         type: String
