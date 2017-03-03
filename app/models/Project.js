@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const Project = mongoose.Schema({
+const projectSchema = mongoose.Schema({
     creator: {
         type: String,
         required: true,
@@ -23,3 +23,7 @@ const Project = mongoose.Schema({
         type: String
     }]
 });
+
+let Project = mongoose.model("Project", projectSchema);
+
+module.exports = Project;

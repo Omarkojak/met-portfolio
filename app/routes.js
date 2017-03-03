@@ -7,6 +7,7 @@ const multer = require('multer');
 
 const User = require("./models/User");
 const Project = require("./models/Project");
+const Portfolio = require("./models/Portfolio");
 
 const secretOrKey = '7QF7d5Bydj6cDF6Eckgh';
 
@@ -91,7 +92,6 @@ router.post('/login',
     }));
 
 router.get("/logout", function (req, res) {
-    console.log("la3eb");
     req.logout();
     res.redirect("/");
 });
@@ -133,15 +133,15 @@ router.get('/:username/portfolio', ensureAuthenticated, function (req, res) {
         });
 });
 
-router.get('/:username/portfolio/new', ensureAuthenticated,function (req, res) {
+router.get('/:username/portfolio/new', ensureAuthenticated, function (req, res) {
     return render('addProject');
 });
 
-router.post('/:username/portfolio/new', ensureAuthenticated,upload.single('img'), function (req, res) {
+router.post('/:username/portfolio/new', ensureAuthenticated, upload.single('img'), function (req, res) {
     let link = req.body.link;
     let img = req.file;
     let username = req.params.username;
-    if(!img && !link){
+    if (!img && !link) {
         req.flash('error', 'You must provide wither a link or an image or both');
         res.redirect('/:username/portfolio/new');
     }
@@ -155,14 +155,54 @@ router.post('/:username/portfolio/new', ensureAuthenticated,upload.single('img')
         screenshots: img.filename,
         links: link
     });
-    project.save(function(err){
-        if(err){
+    project.save(function (err) {
+        if (err) {
             return next(err);
         }
+        let portfolio = Portfolio.findOne({
+            creator: username
+        }, function (portfolio, err) {
+            if (err) {
+                return next(err);
+            }
+            if (!portfolio) {
+                let save = new Portfolio({
+                    creator: username
+                });
+                save.save();
+            }
+        });
         req.flash("Project added sucessfully");
         res.redirect('/:username/portfolio');
     })
 });
 
+router.get('summary/:page', function (req, res) {
+    let total = [];
+    Portfolio.find(function (portfolios, err) {
+        if (err) {
+            return next(err);
+        }
+        let page = req.params.page;
+        let start = 10 * (paage - 1) - 1;
+        for (var i = 0; i < 10; i++ && start < portfolios.length, start++) {
+            Project.find({
+                createdBy: portfolios[i].creator
+            }).sort({
+                createdAt: "ascending"
+            }).limit(2).exec(function (err, projects) {
+                if (err) {
+                    return next(err);
+                }
+                total.push(portfolios[i].creator);
+                total.push(projects[0].name);
+                total.push(projects[1].name);
+            })
+        }
+    })
+    res.render("summary", {
+        total: total,
+    });
+});
 
 module.exports = router;
