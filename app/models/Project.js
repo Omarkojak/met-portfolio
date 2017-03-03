@@ -16,12 +16,12 @@ const projectSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    screenshots: [{
+    screenshot: {
         type: String
-    }],
-    links: [{
+    },
+    link: {
         type: String
-    }]
+    }
 });
 
 let Project = mongoose.model("Project", projectSchema);

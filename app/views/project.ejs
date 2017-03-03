@@ -1,0 +1,16 @@
+<% include _header %>
+
+<div class="container">
+  <div class="">
+    <div class="">
+      <h5> <span>Created by :</span> <a href="/portfolio/<%= currentUser.name() %>"> <%= project.creator %></a></h5>
+      <h5><span>Created on :</span> <%= project.createdAt %></h5>
+      <h5><span>Description :</span> <%= project.comment %></h5>
+      <h5> <span>repo :</span><a href="<%= project.repo %>">   <%= project.link %> </a></h5>
+      <div><img src="../<%= project.img %>" alt=""></div>
+
+    </div>
+  </div>
+</div>
+
+<% include _footer %>

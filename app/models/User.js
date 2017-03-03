@@ -1,8 +1,6 @@
 const bcrypt = require("bcrypt-nodejs");
 const mongoose = require("mongoose");
 
-const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
-
 const userSchema = mongoose.Schema({
     first_name: {
         type: String,
@@ -24,13 +22,7 @@ const userSchema = mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
-        validate: {
-            validator: function (password) {
-                return PASSWORD_REGEX.test(password);
-            },
-            message: 'The password must be atleast 8 characters and should have at least one digit, and one special character'
-        }
+        required: true
     },
     profile_pic: {
         type: String
@@ -66,6 +58,10 @@ userSchema.methods.checkPassword = function (guess, done) {
 
 userSchema.methods.fullname = function () {
     return this.first_name + " " + this.last_name;
+};
+
+userSchema.methods.name = function(){
+  return this.username;
 };
 
 let User = mongoose.model("User", userSchema);

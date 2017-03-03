@@ -1,16 +1,20 @@
 <% include _header %>
-    <h1>here will be added the projects i have</h1>
-    <% if(projects) { %>
-        <% projects.forEach(function(project) { %>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <%= project.name() %>
-                </div>
-            </div>
-        <% }) %>
-        <% } else { %>
-            <div> 
-                <a href="createPortfolio.ejs">Start Crating one</a>
-            </div>
+    <h1>Your projects</h1>
+    <% if(user) { %>
+        <div>
+            <a href="/portfolio/new/<%= user.name() %>">Add projects</a>
+        </div>
         <% } %>
+
+            <% if(projects) { %>
+                <% projects.forEach(function(project) { %>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a href="/project/<%= project._id %>"></a>
+                        </div>
+                    </div>
+                    <% }) %>
+                        <% } %>
+
+
 <% include _footer %>
