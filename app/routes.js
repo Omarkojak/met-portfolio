@@ -5,23 +5,24 @@ const headerParser = require('header-parser');
 const flash = require("connect-flash");
 const multer = require('multer');
 
-const Student = require("./models/Student");
+const User = require("./models/User");
 const Project = require("./models/Project");
 
 const secretOrKey = '7QF7d5Bydj6cDF6Eckgh';
 
-// // https://codeforgeek.com/2016/01/multiple-file-upload-node-js/
-// var storage = multer.diskStorage({
-//     destination: function (req, file, callback) {
-//         callback(null, './uploads');
-//     },
-//     filename: function (req, file, callback) {
-//         callback(null, file.fieldname + '-' + Date.now());
-//     }
-// });
-// var upload = multer({
-//     storage: storage
-// }).array('userPhoto', 1);
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './uploads/');
+    },
+    filename: function (req, file, cb) {
+        const buf = crypto.randomBytes(48);
+        cb(null, Date.now() + buf.toString('hex') + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage: storage
+});
 
 
 const router = express.Router();
@@ -34,6 +35,10 @@ router.use(function (req, res, next) {
 });
 
 router.get("/", function (req, res, next) {
+    res.render("index");
+});
+
+router.get("/", function (req, res) {
     res.render("index");
 });
 
@@ -50,39 +55,52 @@ router.post("/signup", function (req, res, next) {
     if (!first_name || !last_name || !email || !username || !password) {
         return next();
     }
-    let student = new Student({
+    let user = new User({
         first_name: first_name,
         last_name: last_name,
         email: email,
         username: username,
         password: password
     });
-    student.save(function (err) {
+    console.log(password);
+    user.save(function (err) {
         if (err) {
             return next(err);
         }
-        req.flash('infos', 'You have signed up usccessfully please login');
+        req.flash('info', 'You have signed up usccessfully please login');
         res.redirect('/login');
     });
-});
+}, passport.authenticate("login", {
+    successRedirect: "/",
+    failureRedirect: "/signup",
+    failureFlash: true
+}));
 
-router.get('/login', function (req, res) {
+router.get("/login", function (req, res) {
     res.render('login');
 });
 
-router.post("/login", passport.authenticate("login", {
-        successRedirect: "/",
-        failureRedirect: "/login",
+router.post('/login',
+    passport.authenticate('login', {
+        successRedirect: '/',
+        failureRedirect: '/login',
         failureFlash: true
-    }),function (req, res) {
-        console.log("woho");
-});
+    }));
 
 router.get("/logout", function (req, res) {
     console.log("la3eb");
     req.logout();
     res.redirect("/");
 });
+
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        next();
+    } else {
+        req.flash("info", "You must be logged in to see this page.");
+        res.redirect("/login");
+    }
+}
 
 router.get('/portfolio', function (req, res) {
     Project.find({
@@ -96,36 +114,6 @@ router.get('/portfolio', function (req, res) {
         });
     });
 });
-
-// router.post('/portfolio', passport.authenticate("login", {
-//     successRedirect: "/",
-//     failureRedirect: "/login",
-//     failureFlash: true
-// }), upload.single('portfolio-img'), function (req, res, next) {
-//     let portfolioImage = req.file;
-//     let name = '';
-//     if (portfolioImage) {
-//         name = portfolioImage.filename;
-//     }
-//     Student.findOne({
-//         _id: req.user._id
-//     }, function (err, user) {
-//         if (err) {
-//             return next(err);
-//         }
-//         if (user.profile_pic)
-//             return next('Already you have a porfolio');
-//         user.profile_pic = name;
-//         user.save(function (err) {
-//             if (err) {
-//                 return next(err);
-//             }
-//             res.redirect('/portfolio', {
-//                 info: "You have created your portfolio successfully"
-//             });
-//         });
-//     });
-// });
 
 
 module.exports = router;
