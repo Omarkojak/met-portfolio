@@ -4,7 +4,7 @@
 <head>
 
   <meta charset="utf-8">
-  <title>Learn About Me</title>
+  <title>MET Portfolio</title>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 
 </head>
@@ -16,15 +16,13 @@
     <div class="container">
 
       <div class="navbar-header">
-        <a class="navbar-brand" href="/">Learn About Me</a>
+        <a class="navbar-brand" href="/">Home</a>
       </div>
 
       <ul class="nav navbar-nav navbar-right">
         <% if (currentUser) { %>
           <li>
-            <a href="/profile">
-            Hello, <%= currentUser.fullname() %>
-          </a>
+          <a href="/portfolio/<%= currentUser.name() %>">Your Portfolio </a>
           </li>
           <li><a href="/logout">Log out</a></li>
           <% } else { %>
