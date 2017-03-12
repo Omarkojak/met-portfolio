@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const headerParser = require('header-parser');
 const flash = require("connect-flash");
 const multer = require('multer');
-const CONSTANTS = require('./util/constants');
 
 const User = require("./models/User");
 const Project = require("./models/Project");
@@ -14,22 +13,18 @@ const ejs = require('ejs');
 
 const secretOrKey = '7QF7d5Bydj6cDF6Eckgh';
 
-const IMAGE_TYPES = CONSTANTS.IMAGE_TYPES;
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './public/');
+    },
+    filename: function (req, file, cb) {
+        const buf = crypto.randomBytes(48);
+        cb(null, Date.now() + buf.toString('hex') + path.extname(file.originalname));
+    }
+});
 
 const upload = multer({
-    storage: multer.diskStorage({
-        destination: function (req, file, callBack) {
-            return callBack(null, `public/portfolio/`);
-        },
-        filename: function (req, file, callBack) {
-            return callBack(null, `${req.user._id}_${Date.now()}.${file.mimetype.split('/')[1]}`);
-        }
-    }),
-    fileFilter: function (req, file, callBack) {
-        if (IMAGE_TYPES.includes(file.mimetype.split('/')[1]))
-            return callBack(null, true);
-        return callBack(new Error(`Invalid File Type. File type must be ${IMAGE_TYPES.toString()}!`));
-    }
+    storage: storage
 });
 
 
